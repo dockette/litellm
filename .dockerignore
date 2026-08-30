@@ -1,0 +1,5 @@
+.git
+.github
+tests
+*.md
+Makefile
