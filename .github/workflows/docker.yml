@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build image for testing
         uses: docker/build-push-action@v7
@@ -37,9 +37,12 @@ jobs:
       - name: Smoke test image
         run: make test-docker DOCKER_TAG=latest-test
 
+  # Only master reaches this job. The shared workflow always logs in to Docker Hub,
+  # and pull requests (Dependabot most of all) have no access to the secrets.
   build:
     name: "Build"
     needs: test
+    if: github.ref == 'refs/heads/master'
     strategy:
       fail-fast: false
       matrix:
@@ -51,7 +54,7 @@ jobs:
       tag: ${{ matrix.tag }}
       context: "."
       platforms: "linux/amd64,linux/arm64"
-      push: ${{ github.ref == 'refs/heads/master' }}
+      push: true
 
   docs:
     name: "Docs"
@@ -60,7 +63,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Update Docker Hub description
         uses: peter-evans/dockerhub-description@v5
