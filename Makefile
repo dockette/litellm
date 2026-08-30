@@ -36,12 +36,16 @@ shell:
 	docker run --rm -it --entrypoint /bin/sh ${DOCKER_IMAGE}:${DOCKER_TAG}
 
 .PHONY: test
-test: _testcase-pip _testcase-pillow _testcase-codecs _testcase-litellm
+test: _testcase-curl _testcase-pip _testcase-pillow _testcase-codecs _testcase-litellm
 
 # Smoke test: start the image, wait for the proxy, check Pillow inside it
 .PHONY: test-docker
 test-docker:
 	IMAGE=${DOCKER_IMAGE}:${DOCKER_TAG} PORT=${LITELLM_PORT} ./tests/smoke.sh
+
+.PHONY: _testcase-curl
+_testcase-curl:
+	docker run --rm --entrypoint curl ${DOCKER_IMAGE}:${DOCKER_TAG} --version
 
 .PHONY: _testcase-pip
 _testcase-pip:

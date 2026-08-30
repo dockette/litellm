@@ -23,7 +23,8 @@
 application virtualenv.
 
 The upstream image is built on Wolfi and ships a virtualenv at `/app/.venv` without `pip`. LiteLLM imports Pillow for
-image handling (Bedrock, Vertex AI and Ollama), but does not install it. This image fills both gaps.
+image handling (Bedrock, Vertex AI and Ollama), but does not install it. There is also no HTTP client. This image fills
+all three gaps.
 
 **Features**
 
@@ -31,7 +32,8 @@ image handling (Bedrock, Vertex AI and Ollama), but does not install it. This im
 - Python 3.13 (upstream virtualenv at `/app/.venv`)
 - `pip` installed and upgraded, so you can add packages at runtime
 - Pillow preinstalled (JPEG, PNG, WEBP, AVIF, GIF and TIFF)
-- Healthcheck on `/health/liveliness`
+- `curl` installed
+- Healthcheck on `/health/liveliness`, done with `curl`
 - Entrypoint, command, workdir and exposed port are inherited from upstream
 
 ## Usage
@@ -93,7 +95,7 @@ Default user is `root`, same as upstream.
 
 ```sh
 make build          # build the image
-make test           # check pip, Pillow, codecs and LiteLLM
+make test           # check curl, pip, Pillow, codecs and LiteLLM
 make test-docker    # start the image and check the proxy
 make run            # run the proxy on port 14000
 make shell          # open a shell in the image

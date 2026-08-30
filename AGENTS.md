@@ -21,6 +21,6 @@ LiteLLM Proxy Docker image, published as `dockette/litellm`.
 - A version bump touches three places: the `ARG` default, `LITELLM_VERSION` in the
   `Makefile`, and the `tag` matrix in `.github/workflows/docker.yml`.
 - Pillow is not pinned. A rebuild picks up the current release.
-- There is no `curl` and no `wget` in the image. Use `python` for HTTP checks.
+- `curl` is installed on top of the upstream image. The healthcheck uses it.
 - `make test` checks the image contents. `make test-docker` starts the proxy.
 - Run `make build test test-docker` before you commit.
