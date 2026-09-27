@@ -28,7 +28,7 @@ all three gaps.
 
 **Features**
 
-- LiteLLM Proxy `v1.98.0`
+- LiteLLM Proxy `v1.102.1`
 - Python 3.13 (upstream virtualenv at `/app/.venv`)
 - `pip` installed and upgraded, so you can add packages at runtime
 - Pillow preinstalled (JPEG, PNG, WEBP, AVIF, GIF and TIFF)
@@ -68,10 +68,10 @@ docker exec -it <container> /app/.venv/bin/python -m pip install <package>
 
 ## Tags
 
-| Tag       | Upstream                              |
-|-----------|---------------------------------------|
-| `latest`  | `ghcr.io/berriai/litellm:v1.98.0`     |
-| `v1.98.0` | `ghcr.io/berriai/litellm:v1.98.0`     |
+| Tag        | Upstream                           |
+|------------|------------------------------------|
+| `latest`   | `ghcr.io/berriai/litellm:v1.102.1` |
+| `v1.102.1` | `ghcr.io/berriai/litellm:v1.102.1` |
 
 Both tags hold the same LiteLLM version. Pillow is installed at build time and is not pinned, so a rebuild can ship a
 newer Pillow.
