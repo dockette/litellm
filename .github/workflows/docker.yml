@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tag: ["v1.102.1", "latest"]
+        tag: ["v1.104.0", "latest"]
     uses: dockette/.github/.github/workflows/docker.yml@master
     secrets: inherit
     with:
