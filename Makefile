@@ -1,6 +1,7 @@
 DOCKER_IMAGE=dockette/litellm
 DOCKER_TAG?=latest
 DOCKER_PLATFORMS?=linux/amd64,linux/arm64
+VERSION:=$(shell cat VERSION)
 
 LITELLM_VERSION?=v1.104.0
 LITELLM_PORT?=14000
@@ -62,3 +63,13 @@ _testcase-codecs:
 .PHONY: _testcase-litellm
 _testcase-litellm:
 	${TEST_RUN} -c "from importlib.metadata import version; print('litellm', version('litellm'))"
+
+.PHONY: version
+version:
+	@echo ${VERSION}
+
+.PHONY: release
+release:
+	@date -u +%Y.%m.%d > VERSION
+	@echo "VERSION: ${VERSION} -> $$(cat VERSION)"
+	@echo "next: git commit -am \"Release: $$(cat VERSION)\" && git push"

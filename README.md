@@ -91,6 +91,11 @@ Default working directory is `/app`.
 
 Default user is `root`, same as upstream.
 
+## Versions
+
+The release version is the date in [`VERSION`](VERSION). CI pushes `latest` also as `dockette/litellm:<VERSION>`.
+To release, run `make release`, commit and push to `master`.
+
 ## Development
 
 ```sh
@@ -100,6 +105,8 @@ make test-docker    # start the image and check the proxy
 make run            # run the proxy on port 14000
 make shell          # open a shell in the image
 make push           # build and push linux/amd64 and linux/arm64
+make version        # print VERSION
+make release        # set VERSION to today's date
 ```
 
 Build against another LiteLLM release:

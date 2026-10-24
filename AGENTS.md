@@ -22,6 +22,8 @@ LiteLLM Proxy Docker image, published as `dockette/litellm`.
   `Makefile`, and the `tag` matrix in `.github/workflows/docker.yml`.
 - Pillow is not pinned. A rebuild picks up the current release.
 - `curl` is installed on top of the upstream image. The healthcheck uses it.
+- `VERSION` is the release date; `make release` bumps it. CI pushes `latest`
+  also as `<VERSION>` and creates the GitHub release.
 - CI builds every branch. Only master is pushed to Docker Hub.
 - `make test` checks the image contents. `make test-docker` starts the proxy.
 - Run `make build test test-docker` before you commit.
