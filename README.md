@@ -17,16 +17,12 @@
 
 ------
 
-## Prologue
-
 [LiteLLM](https://github.com/BerriAI/litellm) Proxy with `pip` and [Pillow](https://python-pillow.github.io) added to the
-application virtualenv.
+application virtualenv. The upstream image is built on Wolfi and ships a virtualenv at `/app/.venv` without `pip`.
+LiteLLM imports Pillow for image handling (Bedrock, Vertex AI and Ollama), but does not install it. There is also no HTTP
+client. This image fills all three gaps.
 
-The upstream image is built on Wolfi and ships a virtualenv at `/app/.venv` without `pip`. LiteLLM imports Pillow for
-image handling (Bedrock, Vertex AI and Ollama), but does not install it. There is also no HTTP client. This image fills
-all three gaps.
-
-**Features**
+## Features
 
 - LiteLLM Proxy `v1.104.0`
 - Python 3.13 (upstream virtualenv at `/app/.venv`)
@@ -39,57 +35,37 @@ all three gaps.
 ## Usage
 
 ```sh
-docker run \
-    --rm \
-    -it \
-    -p 4000:4000 \
-    -e LITELLM_MASTER_KEY=sk-1234 \
-    dockette/litellm:latest
+docker run --rm -it -p 4000:4000 -e LITELLM_MASTER_KEY=sk-1234 dockette/litellm:latest
 ```
 
-With a configuration file:
-
 ```sh
-docker run \
-    --rm \
-    -it \
-    -p 4000:4000 \
-    -e LITELLM_MASTER_KEY=sk-1234 \
-    -v $(pwd)/config.yaml:/app/config.yaml \
-    dockette/litellm:latest \
-    --config /app/config.yaml --port 4000
-```
+# With a configuration file
+docker run --rm -it -p 4000:4000 -e LITELLM_MASTER_KEY=sk-1234 -v $(pwd)/config.yaml:/app/config.yaml dockette/litellm:latest --config /app/config.yaml --port 4000
 
-Add more Python packages at runtime:
-
-```sh
+# Add more Python packages at runtime
 docker exec -it <container> /app/.venv/bin/python -m pip install <package>
 ```
 
-## Tags
-
-| Tag        | Upstream                           |
-|------------|------------------------------------|
-| `latest`   | `ghcr.io/berriai/litellm:v1.104.0` |
-| `v1.104.0` | `ghcr.io/berriai/litellm:v1.104.0` |
-
-Both tags hold the same LiteLLM version. Pillow is installed at build time and is not pinned, so a rebuild can ship a
-newer Pillow.
-
-## ENV(s)
+## Configuration
 
 - `LITELLM_MASTER_KEY` - master key of the proxy
 - `PORT` - port used by the healthcheck, `4000` by default
 
 The default command is `--port 4000`. This argument wins over `PORT`. Set both if you change the port.
 
-## Workdir
+The working directory is `/app`. The user is `root`, same as upstream.
 
-Default working directory is `/app`.
+## Versions
 
-## User
+| Version | Release |
+|---------|---------|
+| `dockette/litellm:v1.104.0-YYYY.MM.DD` | LiteLLM `v1.104.0` in release `YYYY.MM.DD`; pin this one |
+| `dockette/litellm:v1.104.0` | latest release with LiteLLM `v1.104.0` |
+| `dockette/litellm:YYYY.MM.DD` | release `YYYY.MM.DD` |
+| `dockette/litellm:latest` | latest build of `master` |
 
-Default user is `root`, same as upstream.
+All versions build on `ghcr.io/berriai/litellm:v1.104.0`. Pillow is installed at build time and is not pinned, so a
+rebuild can ship a newer Pillow. Releases are listed on [GitHub](https://github.com/dockette/litellm/releases).
 
 ## Development
 
@@ -100,11 +76,10 @@ make test-docker    # start the image and check the proxy
 make run            # run the proxy on port 14000
 make shell          # open a shell in the image
 make push           # build and push linux/amd64 and linux/arm64
-```
+make version        # print VERSION
+make release        # set today's date in VERSION
 
-Build against another LiteLLM release:
-
-```sh
+# Build against another LiteLLM release
 make build LITELLM_VERSION=v1.97.0
 ```
 
