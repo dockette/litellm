@@ -1,9 +1,9 @@
 DOCKER_IMAGE=dockette/litellm
 DOCKER_TAG?=latest
 DOCKER_PLATFORMS?=linux/amd64,linux/arm64
-VERSION:=$(shell cat VERSION)
 
-LITELLM_VERSION?=v1.104.0
+include VERSION
+
 LITELLM_PORT?=14000
 LITELLM_MASTER_KEY?=sk-dockette
 
@@ -70,6 +70,5 @@ version:
 
 .PHONY: release
 release:
-	@date -u +%Y.%m.%d > VERSION
-	@echo "VERSION: ${VERSION} -> $$(cat VERSION)"
-	@echo "next: git commit -am \"Release: $$(cat VERSION)\" && git push"
+	@sed -i.bak "s/^VERSION=.*/VERSION=$$(date -u +%Y.%m.%d)/" VERSION && rm VERSION.bak
+	@cat VERSION
