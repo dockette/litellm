@@ -93,8 +93,17 @@ Default user is `root`, same as upstream.
 
 ## Versions
 
-The release version is the date in [`VERSION`](VERSION). CI pushes `latest` also as `dockette/litellm:<VERSION>`.
-To release, run `make release`, commit and push to `master`.
+The release version is the date in [`VERSION`](VERSION). The LiteLLM version is pinned in the `Dockerfile`
+(`LITELLM_VERSION`). On `master`, CI pushes the image under four tags:
+
+| Tag | What it is |
+|-----|------------|
+| `dockette/litellm:latest` | latest build of `master` |
+| `dockette/litellm:2026.10.23` | release `2026.10.23` |
+| `dockette/litellm:v1.104.0` | latest build with LiteLLM `v1.104.0` |
+| `dockette/litellm:v1.104.0-2026.10.23` | LiteLLM `v1.104.0` in release `2026.10.23`; pin this one |
+
+To release, run `make release`, commit and push to `master`. An upstream upgrade is a release too.
 
 ## Development
 
