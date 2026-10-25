@@ -2,7 +2,8 @@ DOCKER_IMAGE=dockette/litellm
 DOCKER_TAG?=latest
 DOCKER_PLATFORMS?=linux/amd64,linux/arm64
 
-LITELLM_VERSION?=v1.104.0
+include VERSION
+
 LITELLM_PORT?=14000
 LITELLM_MASTER_KEY?=sk-dockette
 
@@ -62,3 +63,12 @@ _testcase-codecs:
 .PHONY: _testcase-litellm
 _testcase-litellm:
 	${TEST_RUN} -c "from importlib.metadata import version; print('litellm', version('litellm'))"
+
+.PHONY: version
+version:
+	@echo ${VERSION}
+
+.PHONY: release
+release:
+	@sed -i.bak "s/^VERSION=.*/VERSION=$$(date -u +%Y.%m.%d)/" VERSION && rm VERSION.bak
+	@cat VERSION
